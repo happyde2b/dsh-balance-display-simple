@@ -1,0 +1,7 @@
+# dsh-balance-display-simple 的配置层：插入插件行（跟随 bundle 安装到任意 profile）。
+# 服务端注册 GET /api/deepseek-balance-simple（代理 DeepSeek 官方余额接口），
+# 客户端模块在侧边栏标题下方渲染余额条。
+# 如需调整行为，在 profile 的 cordis.patch.yml 里按 id 覆盖 config。
+- insert:
+    - id: balance-display-simple
+      name: dsh-balance-display-simple

@@ -1,0 +1,8 @@
+node_modules/
+*.tgz
+*.token
+.github-token
+.env
+.env.*
+.DS_Store
+Thumbs.db
