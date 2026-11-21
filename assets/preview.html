@@ -1,10 +1,13 @@
 <!doctype html>
 <!-- Screenshot generator for README / plugin market. No real account data:
-     the balance and the period text are fixed fixtures. Render with:
+     the balance and the period text are fixed fixtures. Render at exactly the
+     sidebar width (260 CSS px), then crop the empty bottom rows with 36 CSS px
+     of padding on the background colour (#17181c), so no dead space remains:
      msedge --headless=new --disable-gpu --hide-scrollbars \
-       --force-device-scale-factor=2 --window-size=300,120 \
-       --screenshot=assets/screenshot-valley.png \
+       --force-device-scale-factor=2 --window-size=260,200 \
+       --screenshot=assets/_raw-valley.png \
        "file:///.../assets/preview.html?state=valley"
+     (then trim to 520x245 device px; see AGENTS.md「验证」)
 -->
 <html lang="zh-CN">
 <head>
