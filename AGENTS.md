@@ -51,6 +51,12 @@
 - 客户端冒烟（mock DOM 跑注册 → 挂载 → 注入 → 拉取 → 卸载）：`node scripts/smoke.js`
 - Host 半区（真实导入 + mock ctx：路由形状、405、栅栏 401/403、缺 credentials 分支）：`node scripts/verify-host.js`
 - 端点（桌面端运行中）：`curl http://127.0.0.1:<DSH Web 端口>/api/deepseek-balance-simple`
+- 截图（不含真实账户信息，余额固定 `¥17.42`）：`assets/preview.html?state=valley|peak` 用 Edge headless
+  （`--headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=300,120`）
+  渲染到 `assets/screenshot-valley.png` / `screenshot-peak.png`；图标 `assets/icon-preview.html` → `assets/icon.png`
+- 市场截图约定：仓库根 `screenshots.json` 是 awesome-dsh-plugin 的「作者自声明截图」文件（1-8 张、必须是
+  GitHub 图床的 https URL），比 catalog 的 `data/screenshots.json` 优先；README 里的 `assets/*.png` 则用于
+  市场安装弹窗的自动抽取
 
 ## 踩过的坑
 
