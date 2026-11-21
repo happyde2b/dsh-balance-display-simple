@@ -10,6 +10,7 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 - 每 60 秒自动刷新；点击余额条立即刷新
 - 状态圆点：绿 = 正常，红 = 账户不可用，橙 = 查询失败（保留上次数值）
 - 侧边栏折叠成 rail 时自动隐藏
+- 右侧时段文字：中间的名字红色加粗放大，按 DeepSeek 峰谷定价显示「此时是 梁文锋时段」（峰时）或「此时是 梁文谷时段」（谷时）
 - 跟随主题配色
 
 ## 安全设计
@@ -19,6 +20,9 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 - **Host 半区**（`lib/index.js`）注册同源端点 `GET /api/deepseek-balance-simple`，通过 `credentials`
   服务解析 `DEEPSEEK_API_KEY`（来源：进程环境 > `<DSH_HOME>/.credentials.yaml` > `.env`），
   由服务端调用 `https://api.deepseek.com/user/balance`（15 秒超时，`cache-control: no-store`）。
+- 端点先过 dsh 自己的访问栅栏 `ctx.connection.requestRejection(request)`（Host/Origin 校验与浏览器登录，
+  拒绝时返回 401/403），与 dsh 内置 `/api` 路由一致；老版本 dsh 没有该服务时退回 loopback 信任栅栏，
+  只放行回环 Host、拒绝 cross-site 请求。因此浏览器里打开的外部网页无法调用这个端点。
 - **Client 半区**（`lib/client.js`）只请求这个本地端点，经 MutationObserver 在侧边栏品牌行后注入余额条，
   React 重渲染后自动重新挂载。
 
@@ -36,6 +40,11 @@ node install.js --profile web    # 指定 profile
 # 同时更新 profile 的 package.json（dependencies + dsh.profile.bundles）
 ```
 
+**方式 C：目录链接（本机开发推荐，改动即时生效）**
+
+在 DSH 里用插件管理器把**本仓库目录**作为 bundle 安装（本机已经是这样：profile 的
+`node_modules\dsh-balance-display-simple` 是指向本目录的 junction）。之后改源码只需按右上角的刷新按钮，不用重启。
+
 **方式 B：官方插件管理器**
 
 ```powershell
@@ -43,7 +52,7 @@ node install.js --pack           # 产物：<DSH_HOME>\downloads\dsh-balance-dis
 # 在 DSH「插件 → 添加插件」里填该 tgz 的绝对路径，安装后启用
 ```
 
-安装后**重启 DSH 桌面端**生效。
+目录链接安装：按刷新按钮即可看到新代码。tgz 安装：**重启 DSH 桌面端**生效。
 
 ## 配置
 
