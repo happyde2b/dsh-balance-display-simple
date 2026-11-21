@@ -1,6 +1,6 @@
 {
   "name": "dsh-balance-display-simple",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Show the DeepSeek API account balance under the DSH sidebar brand row, refreshed every 60 seconds through a same-origin endpoint so the browser never touches the API key.",
   "keywords": [
     "dsh",
