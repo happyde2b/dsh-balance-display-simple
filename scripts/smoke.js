@@ -29,7 +29,19 @@ function makeEl(tag, cls) {
     className: cls || '',
     style: {},
     textContent: '',
-    innerHTML: '',
+    get innerHTML() { return this._html ?? '' },
+    set innerHTML(html) {
+      this._html = html
+      const list = (this.children ??= [])
+      list.length = 0
+      const re = /<span class="([^"]+)">([^<]*)<\/span>/g
+      let m = null
+      while ((m = re.exec(html)) !== null) {
+        const el = makeEl('span', m[1])
+        el.textContent = m[2]
+        this.appendChild(el)
+      }
+    },
     title: '',
     isConnected: true,
     parentElement: null,
@@ -57,6 +69,17 @@ function makeEl(tag, cls) {
     appendChild(el) {
       ;(this.children ??= []).push(el)
       el.parentElement = this
+    },
+    insertBefore(el, ref) {
+      const list = (this.children ??= [])
+      const i = ref ? list.indexOf(ref) : -1
+      if (i < 0) list.push(el)
+      else list.splice(i, 0, el)
+      el.parentElement = this
+      return el
+    },
+    get firstElementChild() {
+      return (this.children ?? [])[0] ?? null
     },
   }
 }
@@ -134,6 +157,7 @@ check('注册 id 正确', handoff?.id === EXPECTED_ID)
 check('factory 执行且导出 apply', typeof peakRun.mod.apply === 'function')
 check('余额条已插入品牌行之后', peakRun.chip !== null && peakRun.chip.className === 'dsh-balance-chip')
 check('余额条含数值节点', peakRun.chip?.querySelector('.dsh-balance-value') !== null || true)
+check('状态圆点排在最前', peakRun.chip?.children?.[0]?.className === 'dsh-balance-dot')
 const peak = sloganOf(peakRun.chip)
 check('工作日 10:00 为峰时（梁文锋 + is-peak）', peak.name?.textContent === '梁文锋' && /\bis-peak\b/.test(peak.slogan?.className ?? ''))
 check('挂载后触发一次拉取', fetchCount >= 1)

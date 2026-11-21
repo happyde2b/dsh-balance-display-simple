@@ -24,7 +24,7 @@
 - exact 路由优先于 `client-connection` 注册的 `/api` 前缀路由，因此路径不冲突。
 - 端点返回：成功 `{ ok: true, fetchedAt, is_available, balance_infos: [...] }`；被栅栏拒绝时 `{ ok: false, error: 'unauthorized' | 'forbidden' }`（HTTP 401/403）；其余失败 `{ ok: false, error }`（HTTP 200）。
 - 渲染：余额条右侧有一段时段文字（`lib/client.js` 顶部 `SLOGAN_PREFIX` / `SLOGAN_SUFFIX` / `PEAK_NAME` / `VALLEY_NAME`），按 DeepSeek 峰谷定价二选一：峰时（周一至周五 09:00–12:00、14:00–18:00，北京时间）显示「此时是 梁文锋时段」，其余时间显示「此时是 梁文谷时段」，其中的“其余时间”= 周末全天（含调休上班的周末，DeepSeek 明确按谷时）+ 中国法定节假日全天 + 工作日非峰窗口；节假日表见 `lib/client.js` 的 `HOLIDAY_DATES`（2026 / 2027 国务院通知，每年更新）；每次刷新重算；中间的名字单独成 `span.dsh-balance-slogan-name`：17px、左右各 5px 间距；谷时加 `is-valley`（亮绿 `#34c759` + 绿色微光、整段不透明，表示“开心”），峰时加 `is-peak`（灰蓝 `#8d94a4`、600 字重、无光晕、整段 opacity .58，表示“沮丧”）（余额条元素间距 5px，260px 侧栏下不截断）；前缀/后缀 11px 灰色，整段紧接在余额数值后面左对齐，空间不够时省略号；
-  多币种 `balance_infos` 用 ` · ` 拼接，金额 `toFixed(2)`；`is_available === false` 圆点红，请求失败圆点橙并保留上次数值；侧栏折叠成 rail（祖先类名含 `collapsed`）时隐藏。
+  余额条顺序：状态圆点（`dsh-balance-dot`，最前）→ `API 余额` 标签 → 金额 → 时段文字（`ensureDotFirst()` 会在热重载后把圆点挪回最前）；多币种 `balance_infos` 用 ` · ` 拼接，金额 `toFixed(2)`；`is_available === false` 圆点红，请求失败圆点橙并保留上次数值；侧栏折叠成 rail（祖先类名含 `collapsed`）时隐藏。
 - 挂载幂等：DOM 里已有 chip 就复用；React 重渲染后由 MutationObserver（300ms 节流）重新挂载。
 - 卸载：`ctx.effect` 返回的 disposer 清定时器、断 observer、移除余额条。
 
