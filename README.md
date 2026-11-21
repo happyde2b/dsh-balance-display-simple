@@ -19,6 +19,9 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 - **Host 半区**（`lib/index.js`）注册同源端点 `GET /api/deepseek-balance-simple`，通过 `credentials`
   服务解析 `DEEPSEEK_API_KEY`（来源：进程环境 > `<DSH_HOME>/.credentials.yaml` > `.env`），
   由服务端调用 `https://api.deepseek.com/user/balance`（15 秒超时，`cache-control: no-store`）。
+- 端点先过 dsh 自己的访问栅栏 `ctx.connection.requestRejection(request)`（Host/Origin 校验与浏览器登录，
+  拒绝时返回 401/403），与 dsh 内置 `/api` 路由一致；老版本 dsh 没有该服务时退回 loopback 信任栅栏，
+  只放行回环 Host、拒绝 cross-site 请求。因此浏览器里打开的外部网页无法调用这个端点。
 - **Client 半区**（`lib/client.js`）只请求这个本地端点，经 MutationObserver 在侧边栏品牌行后注入余额条，
   React 重渲染后自动重新挂载。
 
