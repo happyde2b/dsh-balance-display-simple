@@ -1,8 +1,12 @@
 <!doctype html>
 <!-- Screenshot generator for README / plugin market. No real account data:
-     the balance and the period text are fixed fixtures. Render at exactly the
-     sidebar width (260 CSS px), then crop the empty bottom rows with 36 CSS px
-     of padding on the background colour (#17181c), so no dead space remains:
+     the balance and the period text are fixed fixtures.
+     `assets/wordmark.svg` is the real "deepseek HARNESS" wordmark extracted from
+     the DSH web bundle (whale + lettering + badge, 182x24 at 1x), so the brand
+     row matches the live sidebar.
+     Render at exactly the sidebar width (260 CSS px), then crop the empty
+     bottom rows and keep 36 CSS px of padding on the background colour
+     (#17181c), so no dead space remains:
      msedge --headless=new --disable-gpu --hide-scrollbars \
        --force-device-scale-factor=2 --window-size=260,200 \
        --screenshot=assets/_raw-valley.png \
@@ -15,23 +19,18 @@
   <title>balance chip preview</title>
   <style>
     :root {
-      --dsw-alias-label-primary: #e8e8e8;
+      --dsw-alias-label-primary: #f9fafb;
       --dsw-alias-label-secondary: #9aa0a6;
       --sidebar: #17181c;
-      --rail-border: rgba(255, 255, 255, .10);
     }
     html, body { margin: 0; background: var(--sidebar); }
     body { font: 12px/18px system-ui, "Microsoft YaHei", sans-serif; color: var(--dsw-alias-label-primary); }
-    .sidebar { width: 260px; padding: 12px 10px 16px; box-sizing: border-box; }
-    .brand { display: flex; align-items: center; gap: 6px; padding: 2px 4px 0; }
-    .brand-word { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
-    .brand-badge {
-      margin-top: 2px; padding: 1px 5px; border: 1px solid rgba(255, 255, 255, .75); border-radius: 3px;
-      font-size: 9px; font-weight: 600; letter-spacing: .12em; line-height: 13px; opacity: .9;
-    }
+    .sidebar { width: 260px; padding: 10px 10px 14px; box-sizing: border-box; }
+    .brand { display: flex; align-items: center; padding: 2px 2px 0; }
+    .wordmark { display: block; width: 182px; height: 24px; }
     .chip {
-      box-sizing: border-box; display: flex; align-items: center; gap: 5px;
-      margin: 12px 2px 0; padding: 0 2px; overflow: hidden; opacity: .85; white-space: nowrap;
+      box-sizing: border-box; display: flex; align-items: center; gap: 6px;
+      margin: 12px 2px 0; padding: 0 2px; overflow: hidden; opacity: .9; white-space: nowrap;
     }
     .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #34c759; }
     .label { flex: none; color: var(--dsw-alias-label-secondary); }
@@ -46,10 +45,7 @@
 </head>
 <body>
   <div class="sidebar">
-    <div class="brand">
-      <span class="brand-word">deepseek</span>
-      <span class="brand-badge">HARNESS</span>
-    </div>
+    <div class="brand"><img class="wordmark" src="wordmark.svg" alt="deepseek HARNESS"></div>
     <div class="chip">
       <span class="dot"></span>
       <span class="label">API 余额</span>

@@ -54,7 +54,7 @@
 - 截图（不含真实账户信息，余额固定 `¥17.42`）：`assets/preview.html?state=valley|peak` 用 Edge headless
   （`--headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=260,200`，
   宽度等于侧栏 260px，避免右侧空白）渲染成临时 raw，再把底部空行裁掉、四周留 36 CSS px 底色（`#17181c`），
-  输出固定 520×245 的 `assets/screenshot-valley.png` / `screenshot-peak.png`（裁剪脚本见 `preview.html` 注释）；
+  输出固定 520×248 的 `assets/screenshot-valley.png` / `screenshot-peak.png`（裁剪脚本见 `preview.html` 注释；品牌行用 `assets/wordmark.svg`——从 DSH 前端包提取的原版 182×24 字标，仅截图用）；
   图标 `assets/icon-preview.html` → `assets/icon.png`（512 CSS px ×2 = 1024×1024）
 - 市场截图约定：仓库根 `screenshots.json` 是 awesome-dsh-plugin 的「作者自声明截图」文件（1-8 张、必须是
   GitHub 图床的 https URL），比 catalog 的 `data/screenshots.json` 优先；README 里的 `assets/*.png` 则用于

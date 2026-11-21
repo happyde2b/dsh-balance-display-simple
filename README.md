@@ -26,6 +26,8 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 
 截图用的余额是固定示例值（`¥17.42`），不含任何真实账户信息；生成方式见
 [`assets/preview.html`](assets/preview.html) 顶部注释（Edge headless 渲染，`--force-device-scale-factor=2`）。
+品牌行里的 `assets/wordmark.svg` 是从 DeepSeek Harness 前端包里提取的原版字标（鲸鱼 + deepseek + HARNESS 徽标），
+只用于让截图和真实侧栏一致，不参与插件运行。
 
 ## 图标
 
