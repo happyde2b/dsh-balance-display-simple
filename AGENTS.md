@@ -16,7 +16,7 @@
 
 | 半区 | 文件 | 职责 |
 | --- | --- | --- |
-| Host | `lib/index.js` | 注册 `kind: 'exact'` 路由 `GET /api/deepseek-balance-simple`；先调 `ctx.connection.requestRejection(request)`（Host/Origin 校验 + 浏览器登录，401/403），老版 DSH 无该服务时退回 `isTrustedLoopbackRequest`（只放行回环 Host、拒绝 `sec-fetch-site: cross-site`、Origin 与 Host 不一致）；再经 `credentials` 解析 `DEEPSEEK_API_KEY`，代理 `https://api.deepseek.com/user/balance`（15s 超时，`cache-control: no-store`） |
+| Host | `lib/index.js` | 注册 `kind: 'exact'` 路由 `GET /api/deepseek-balance-simple`；先调 `ctx.connection.requestRejection(request)`（Host/Origin 校验 + 浏览器登录，401/403），老版 DSH 无该服务时退回 `isTrustedLoopbackRequest`（只放行回环 Host、拒绝 `sec-fetch-site: cross-site`、Origin 与 Host 不一致）；余额来源两条：先调可选服务 `ctx.get('deepseekAccount')` 的 `getBalance({ version, locale, timezoneOffsetSeconds })`（DeepSeek 账号 OAuth 登录，免 API Key；把充值 `value` + 赠送 `bonusWallets` 按币种求和，响应 `source: 'account'`），服务缺失、未登录（null）或失败时回退 `credentials` 的 `DEEPSEEK_API_KEY` → `https://api.deepseek.com/user/balance`（15s 超时，响应 `source: 'apiKey'`）；统一 `cache-control: no-store` |
 | Client | `lib/client.js` | `window.__ModuleLoader__.load(...)` 客户端模块；MutationObserver 监听侧栏，把余额条插到品牌按钮所在行之后 |
 
 - 包名 / 插件 id：`dsh-balance-display-simple`；patch id：`balance-display-simple`（`cordis.patch.yml`）。

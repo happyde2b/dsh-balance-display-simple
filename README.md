@@ -7,18 +7,29 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 ## 功能
 
 - 侧边栏 deepseek 标题正下方显示 `API 余额 ¥19.74`，多币种用 ` · ` 拼接
+- 免 API Key：DSH 里登录过 DeepSeek 账号就直接读账号钱包；没登录才回退到 `DEEPSEEK_API_KEY`
 - 每 60 秒自动刷新；点击余额条立即刷新
 - 状态圆点：绿 = 正常，红 = 账户不可用，橙 = 查询失败（保留上次数值）
 - 侧边栏折叠成 rail 时自动隐藏
 - 右侧时段文字：中间的名字红色加粗放大，按 DeepSeek 峰谷定价显示「此时是 梁文锋时段」（峰时）或「此时是 梁文谷时段」（谷时）
 - 跟随主题配色
 
+## 余额来源
+
+优先用 **DeepSeek 账号登录**（不需要手动填 API Key）：DSH 的 `deepseekAccount` 服务在账号 OAuth 登录后
+可直接查询平台钱包，插件把「充值余额 + 赠送额度」按币种求和显示，响应里 `source: 'account'`。
+
+账号未登录、服务不存在或查询失败时，回退到 **API Key** 路线（`DEEPSEEK_API_KEY` →
+`https://api.deepseek.com/user/balance`），响应里 `source: 'apiKey'`。两条路线拿的是同一个 DeepSeek
+账户的钱，所以数值一致；区别只是要不要手动准备 Key。
+
 ## 安全设计
 
-浏览器 / 渲染进程**不接触 API Key**：
+浏览器 / 渲染进程**不接触 API Key 和账号 token**：
 
-- **Host 半区**（`lib/index.js`）注册同源端点 `GET /api/deepseek-balance-simple`，通过 `credentials`
-  服务解析 `DEEPSEEK_API_KEY`（来源：进程环境 > `<DSH_HOME>/.credentials.yaml` > `.env`），
+- **Host 半区**（`lib/index.js`）注册同源端点 `GET /api/deepseek-balance-simple`：先尝试可选服务
+  `ctx.get('deepseekAccount')` 的 `getBalance({ version, locale, timezoneOffsetSeconds })`；
+  拿不到再通过 `credentials` 服务解析 `DEEPSEEK_API_KEY`（来源：进程环境 > `<DSH_HOME>/.credentials.yaml` > `.env`），
   由服务端调用 `https://api.deepseek.com/user/balance`（15 秒超时，`cache-control: no-store`）。
 - 端点先过 dsh 自己的访问栅栏 `ctx.connection.requestRejection(request)`（Host/Origin 校验与浏览器登录，
   拒绝时返回 401/403），与 dsh 内置 `/api` 路由一致；老版本 dsh 没有该服务时退回 loopback 信任栅栏，

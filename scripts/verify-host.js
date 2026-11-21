@@ -28,6 +28,7 @@ check('导出 apply 函数', typeof mod.apply === 'function')
 const registered = []
 const disposed = []
 let connection = undefined
+let account = undefined
 const ctx = {
   effect(fn, label) {
     const disposer = fn()
@@ -42,6 +43,7 @@ const ctx = {
   },
   get(name) {
     if (name === 'connection') return connection
+    if (name === 'deepseekAccount') return account
     return undefined // credentials 不可用：只验证注册路径与栅栏，不解析凭证
   },
   logger: { warn() {} },
@@ -124,6 +126,66 @@ connection = { requestRejection: () => 403 }
 res = makeRes()
 await route.handler({ method: 'GET', headers: TRUSTED }, res)
 check('connection 拒绝 403 时原样返回', res.statusCode === 403 && res.body.includes('forbidden'))
+
+// ---- 5. 账号服务优先：ready 时直接返回账号钱包（充值 + 赠送按币种求和）----
+connection = { requestRejection: () => undefined }
+let accountClient
+account = {
+  async getBalance(client) {
+    accountClient = client
+    return {
+      status: 'ready',
+      value: [{ currency: 'CNY', balance: '18.40' }],
+      bonusWallets: [{ currency: 'CNY', balance: '2.12' }],
+    }
+  },
+}
+res = makeRes()
+await route.handler({ method: 'GET', headers: TRUSTED }, res)
+let body = JSON.parse(res.body)
+check(
+  '账号 ready 时返回 source=account 且金额求和',
+  res.statusCode === 200 &&
+    body.ok === true &&
+    body.source === 'account' &&
+    body.is_available === true &&
+    body.balance_infos.length === 1 &&
+    body.balance_infos[0].currency === 'CNY' &&
+    body.balance_infos[0].total_balance === '20.52',
+)
+check(
+  '账号调用带 version/locale/timezoneOffsetSeconds',
+  accountClient !== undefined &&
+    typeof accountClient.version === 'string' &&
+    accountClient.version !== '' &&
+    accountClient.locale === 'zh-CN' &&
+    Number.isInteger(accountClient.timezoneOffsetSeconds),
+)
+
+// ---- 6. 未登录（null）与查询失败（failed）都回退到 API Key 路线 ----
+account = { async getBalance() { return null } }
+res = makeRes()
+await route.handler({ method: 'GET', headers: TRUSTED }, res)
+check(
+  '账号未登录时回退 credentials 分支',
+  res.statusCode === 200 && res.body.includes('credentials service is unavailable'),
+)
+
+account = { async getBalance() { return { status: 'failed' } } }
+res = makeRes()
+await route.handler({ method: 'GET', headers: TRUSTED }, res)
+check(
+  '账号 failed 时回退 credentials 分支',
+  res.statusCode === 200 && res.body.includes('credentials service is unavailable'),
+)
+
+account = { async getBalance() { throw new Error('boom') } }
+res = makeRes()
+await route.handler({ method: 'GET', headers: TRUSTED }, res)
+check(
+  '账号抛错时回退 credentials 分支',
+  res.statusCode === 200 && res.body.includes('credentials service is unavailable'),
+)
 
 console.log(failures === 0 ? '\nHOST VERIFY PASSED' : `\nHOST VERIFY FAILED (${failures})`)
 process.exit(failures === 0 ? 0 : 1)
