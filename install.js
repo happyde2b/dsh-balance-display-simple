@@ -29,7 +29,7 @@ const dshHome = argValue('--dsh-home', process.env.DSH_HOME ?? join(process.env.
 const profileDir = join(dshHome, 'profiles', profile)
 
 // 打包/安装时排除：安装脚本自身、内部文档、git 元数据、依赖目录。
-const EXCLUDED_TOP = new Set(['install.js', 'scripts', 'AGENTS.md', '.git', '.gitignore', '.gitattributes', 'node_modules'])
+const EXCLUDED_TOP = new Set(['install.js', 'scripts', 'AGENTS.md', 'assets', 'screenshots.json', '.git', '.gitignore', '.gitattributes', 'node_modules'])
 const include = (src) => {
   const rel = relative(here, src)
   return rel === '' || !EXCLUDED_TOP.has(rel.split(sep)[0])
