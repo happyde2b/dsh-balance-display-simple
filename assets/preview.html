@@ -1,0 +1,65 @@
+<!doctype html>
+<!-- Screenshot generator for README / plugin market. No real account data:
+     the balance and the period text are fixed fixtures. Render with:
+     msedge --headless=new --disable-gpu --hide-scrollbars \
+       --force-device-scale-factor=2 --window-size=300,120 \
+       --screenshot=assets/screenshot-valley.png \
+       "file:///.../assets/preview.html?state=valley"
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>balance chip preview</title>
+  <style>
+    :root {
+      --dsw-alias-label-primary: #e8e8e8;
+      --dsw-alias-label-secondary: #9aa0a6;
+      --sidebar: #17181c;
+      --rail-border: rgba(255, 255, 255, .10);
+    }
+    html, body { margin: 0; background: var(--sidebar); }
+    body { font: 12px/18px system-ui, "Microsoft YaHei", sans-serif; color: var(--dsw-alias-label-primary); }
+    .sidebar { width: 260px; padding: 12px 10px 16px; box-sizing: border-box; }
+    .brand { display: flex; align-items: center; gap: 6px; padding: 2px 4px 0; }
+    .brand-word { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+    .brand-badge {
+      margin-top: 2px; padding: 1px 5px; border: 1px solid rgba(255, 255, 255, .75); border-radius: 3px;
+      font-size: 9px; font-weight: 600; letter-spacing: .12em; line-height: 13px; opacity: .9;
+    }
+    .chip {
+      box-sizing: border-box; display: flex; align-items: center; gap: 5px;
+      margin: 12px 2px 0; padding: 0 2px; overflow: hidden; opacity: .85; white-space: nowrap;
+    }
+    .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #34c759; }
+    .label { flex: none; color: var(--dsw-alias-label-secondary); }
+    .value { flex: none; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .slogan { flex: 0 1 auto; min-width: 0; padding-left: 2px; color: #8d94a4; font-size: 11px; line-height: 16px; }
+    .name { margin: 0 5px; font-size: 17px; font-weight: 700; line-height: 18px; }
+    .chip.is-valley .slogan { opacity: 1; }
+    .chip.is-valley .name { color: #34c759; text-shadow: 0 0 8px rgba(52, 199, 89, .55); }
+    .chip.is-peak .slogan { opacity: .58; }
+    .chip.is-peak .name { color: #8d94a4; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="brand">
+      <span class="brand-word">deepseek</span>
+      <span class="brand-badge">HARNESS</span>
+    </div>
+    <div class="chip">
+      <span class="dot"></span>
+      <span class="label">API 余额</span>
+      <span class="value">¥17.42</span>
+      <span class="slogan">此时是<span class="name">梁文谷</span>时段</span>
+    </div>
+  </div>
+  <script>
+    // ?state=peak|valley — fixed fixtures so the screenshots never carry real account state.
+    const state = new URLSearchParams(location.search).get('state') === 'peak' ? 'peak' : 'valley'
+    const chip = document.querySelector('.chip')
+    chip.classList.add(state === 'peak' ? 'is-peak' : 'is-valley')
+    chip.querySelector('.name').textContent = state === 'peak' ? '梁文锋' : '梁文谷'
+  </script>
+</body>
+</html>

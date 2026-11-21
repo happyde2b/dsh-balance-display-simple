@@ -14,6 +14,30 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 - 右侧时段文字：中间的名字红色加粗放大，按 DeepSeek 峰谷定价显示「此时是 梁文锋时段」（峰时）或「此时是 梁文谷时段」（谷时）
 - 跟随主题配色
 
+## 截图
+
+谷时（周一至周五 12:00–14:00、18:00–次日 09:00，以及周末和法定节假日全天）：
+
+![谷时：此时是 梁文谷时段](assets/screenshot-valley.png)
+
+峰时（周一至周五 09:00–12:00、14:00–18:00，北京时间）：
+
+![峰时：此时是 梁文锋时段](assets/screenshot-peak.png)
+
+截图用的余额是固定示例值（`¥17.42`），不含任何真实账户信息；生成方式见
+[`assets/preview.html`](assets/preview.html) 顶部注释（Edge headless 渲染，`--force-device-scale-factor=2`）。
+
+## 图标
+
+`assets/icon.svg`（源文件）/ `assets/icon.png`（1024×1024 栅格化）。插件市场索引的 `icon` 字段可直接指向它：
+
+```json
+"icon": "https://raw.githubusercontent.com/happyde2b/dsh-balance-display-simple/main/assets/icon.svg"
+```
+
+DSH 索引格式 1 里 `icon` 也接受内联的 base64 `data:` URL（SVG/PNG/JPEG/WebP，解码后 ≤ 32 KiB）或相对
+索引 URL 的路径；SVG 只有 1.4 KB，内联也不会撑大索引。
+
 ## 余额来源
 
 优先用 **DeepSeek 账号登录**（不需要手动填 API Key）：DSH 的 `deepseekAccount` 服务在账号 OAuth 登录后
