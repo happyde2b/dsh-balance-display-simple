@@ -22,17 +22,22 @@
   },
   "type": "module",
   "main": "lib/index.js",
+  "icon": "icon.svg",
   "exports": {
     ".": {
       "default": "./lib/index.js"
     },
     "./client": "./lib/client.js",
+    "./icon": "./icon.svg",
+    "./locale/*.json": "./locale/*.json",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "icon.svg",
+    "locale"
   ],
   "dsh": {
     "bundle": {
