@@ -31,14 +31,24 @@ DSH 侧边栏顶部品牌行下方实时显示 **DeepSeek API 账户余额**。
 
 ## 图标
 
-`assets/icon.svg`（源文件）/ `assets/icon.png`（1024×1024 栅格化）。插件市场索引的 `icon` 字段可直接指向它：
+两个用途、两个文件：
+
+| 用途 | 文件 | 说明 |
+| --- | --- | --- |
+| 插件行图标（插件管理器 / 设置页） | `icon.svg` | 36×36 透明底，只画 `¥` 和绿色状态点，底色与圆角容器由 DSH 自己套；`package.json` 顶层 `"icon": "icon.svg"` 指向它 |
+| 插件市场卡片图标 | `assets/icon.svg` / `assets/icon.png` | 512 栅格的深色圆角瓦片（市场卡片需要自己的底），索引 `icon` 字段指向它 |
+
+插件行图标必须**在包内**、≤256 KiB、SVG/PNG/JPEG/WebP，写成绝对路径或 URL 会被拒绝。标题和描述由
+`locale/zh.json`、`locale/en.json` 的 `meta.title` / `meta.description` 提供（插件未激活时也会读）。
+
+插件市场索引的 `icon` 字段指向市场瓦片：
 
 ```json
 "icon": "https://raw.githubusercontent.com/happyde2b/dsh-balance-display-simple/main/assets/icon.svg"
 ```
 
 DSH 索引格式 1 里 `icon` 也接受内联的 base64 `data:` URL（SVG/PNG/JPEG/WebP，解码后 ≤ 32 KiB）或相对
-索引 URL 的路径；SVG 只有 1.4 KB，内联也不会撑大索引。
+索引 URL 的路径。
 
 ## 余额来源
 

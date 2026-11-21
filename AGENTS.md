@@ -56,6 +56,10 @@
   宽度等于侧栏 260px，避免右侧空白）渲染成临时 raw，再把底部空行裁掉、四周留 36 CSS px 底色（`#17181c`），
   输出固定 520×248 的 `assets/screenshot-valley.png` / `screenshot-peak.png`（裁剪脚本见 `preview.html` 注释；品牌行用 `assets/wordmark.svg`——从 DSH 前端包提取的原版 182×24 字标，仅截图用）；
   图标 `assets/icon-preview.html` → `assets/icon.png`（512 CSS px ×2 = 1024×1024）
+- 图标：插件行图标是包根 `icon.svg`（36×36，透明底、只画 `¥` + 绿点，容器由 DSH 画；`package.json` 顶层
+  `"icon": "icon.svg"`，必须包内、≤256 KiB，绝对路径/URL 会被拒）；市场卡片图标是 `assets/icon.svg` /
+  `assets/icon.png`（512 深色圆角瓦片，市场需要自带底）。标题/描述来自 `locale/zh.json`、`locale/en.json`
+  的 `meta.title` / `meta.description`（插件未激活时也会读）
 - 市场截图约定：仓库根 `screenshots.json` 是 awesome-dsh-plugin 的「作者自声明截图」文件（1-8 张、必须是
   GitHub 图床的 https URL），比 catalog 的 `data/screenshots.json` 优先；README 里的 `assets/*.png` 则用于
   市场安装弹窗的自动抽取

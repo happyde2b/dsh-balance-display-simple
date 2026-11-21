@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Balance display",
+    "description": "Shows the DeepSeek API balance under the sidebar brand row, refreshed every 60 seconds; the browser never touches the API key. The right side names the current pricing period: Liang Wenfeng (peak) or Liang Wengu (off-peak)."
+  }
+}

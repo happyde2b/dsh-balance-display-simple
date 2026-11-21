@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" role="img" aria-label="余额显示">
+  <g fill="none" stroke="#8a919b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 8.5 18 16.5 24 8.5"/>
+    <path d="M18 16.5V28"/>
+    <path d="M11.5 19h13M11.5 23h13"/>
+  </g>
+  <circle cx="27.5" cy="8.5" r="3" fill="#2fb14d"/>
+</svg>
